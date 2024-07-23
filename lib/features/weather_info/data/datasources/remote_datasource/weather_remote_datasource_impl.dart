@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-import 'package:weather_clean_architecture/core/constant/Constant.dart';
+import 'package:weather_clean_architecture/core/constant/constant.dart';
 import 'package:weather_clean_architecture/core/network/dio_client.dart';
 import 'package:weather_clean_architecture/core/network/network_exception.dart';
 import 'package:weather_clean_architecture/features/weather_info/data/datasources/remote_datasource/weather_remote_datasource.dart';

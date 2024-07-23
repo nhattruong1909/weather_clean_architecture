@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'dart:developer';
 
-import 'package:weather_clean_architecture/core/constant/Constant.dart';
+import 'package:weather_clean_architecture/core/constant/constant.dart';
 
 class DioClient {
   late final Dio _dio;
