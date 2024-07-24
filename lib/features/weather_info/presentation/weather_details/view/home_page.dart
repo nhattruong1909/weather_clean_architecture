@@ -1,6 +1,9 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:weather_clean_architecture/features/weather_info/presentation/weather_details/widgets/error_widget.dart';
 import 'package:weather_clean_architecture/features/weather_info/presentation/weather_details/bloc/weather_bloc.dart';
 import 'package:weather_clean_architecture/features/weather_info/presentation/weather_details/widgets/weather_details_widget.dart';
 
@@ -19,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    blocWeather.add(WeatherInitialEvent());
+    blocWeather.add(const WeatherInitialEvent());
   }
 
   Widget _searchTextField() {
@@ -27,7 +30,7 @@ class _HomePageState extends State<HomePage> {
         controller: searchController,
         autofocus: true, //Display the keyboard when TextField is displayed
         cursorColor: Colors.black,
-        style: TextStyle(
+        style: const TextStyle(
           color: Colors.black,
           fontSize: 20,
         ),
@@ -35,7 +38,7 @@ class _HomePageState extends State<HomePage> {
             blocWeather.add(WeatherInputCityEvent(searchController.text)),
         textInputAction:
             TextInputAction.search, //Specify the action button on the keyboard
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
             //Style of TextField
             enabledBorder: UnderlineInputBorder(
                 //Default TextField border
@@ -58,7 +61,8 @@ class _HomePageState extends State<HomePage> {
         value: blocWeather,
         child: Scaffold(
           appBar: AppBar(
-            title: !_searchBool ? Text('Weather App') : _searchTextField(),
+            title:
+                !_searchBool ? const Text('Weather App') : _searchTextField(),
             actions: !_searchBool
                 ? [
                     IconButton(
@@ -67,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                             _searchBool = true;
                           });
                         },
-                        icon: Icon(Icons.search))
+                        icon: const Icon(Icons.search))
                   ]
                 : [
                     IconButton(
@@ -76,33 +80,38 @@ class _HomePageState extends State<HomePage> {
                             _searchBool = false;
                           });
                         },
-                        icon: Icon(Icons.clear))
+                        icon: const Icon(Icons.clear))
                   ],
           ),
           body: BlocBuilder<WeatherBloc, WeatherState>(
             builder: (context, state) {
-              if (state is WeatherInitial)
-                return const Placeholder();
-              else if (state is WeatherLoadingState)
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              else if (state is WeatherLoadedByCityState)
+              if (state is WeatherInitial) {
                 return Container(
-                    decoration: BoxDecoration(
+                    width: double.infinity,
+                    height: double.infinity,
+                    decoration: const BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/background.jpg'),
+                            fit: BoxFit.cover)));
+              } else if (state is WeatherLoadingState)
+                return Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    decoration: const BoxDecoration(
                         image: DecorationImage(
                             image: AssetImage('assets/background.jpg'),
                             fit: BoxFit.cover)),
-                    height: double.infinity,
-                    width: double.infinity,
-                    child: SingleChildScrollView(
-                      child: WeatherDetailsWidget(
-                          weather: state.weatherInfoEntity!),
+                    child: const Center(
+                      child: CircularProgressIndicator(),
                     ));
+              else if (state is WeatherLoadedByCityState)
+                return WeatherDetailsWidget(
+                    weather: state.weatherInfoEntity!,
+                    weather_forecast: state.weatherInfoForecastEntity!);
               else if (state is WeatherErrorState)
-                throw Exception(state.message);
+                return CustomErrorWidget(error: state.message);
               else
-                throw Exception('Unknown Error!');
+                throw const CustomErrorWidget(error: 'Unknown Error!');
             },
           ),
         ));

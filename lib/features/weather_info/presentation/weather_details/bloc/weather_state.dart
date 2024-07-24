@@ -13,7 +13,9 @@ final class WeatherInitial extends WeatherState {
 
 final class WeatherLoadedByCityState extends WeatherState {
   final WeatherInfoEntity? weatherInfoEntity;
-  const WeatherLoadedByCityState(this.weatherInfoEntity);
+  final WeatherInfoForecastEntity? weatherInfoForecastEntity;
+  const WeatherLoadedByCityState(
+      this.weatherInfoEntity, this.weatherInfoForecastEntity);
 }
 
 final class WeatherLoadingState extends WeatherState {

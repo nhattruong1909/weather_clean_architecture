@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:weather_clean_architecture/features/weather_info/domain/enitites/weather_remote_info_response_enitity/weather_theme_entity.dart';
+import 'package:weather_clean_architecture/features/weather_info/domain/enitites/current_weather_remote_info_response_enitity/weather_theme_entity.dart';
 import 'package:weather_clean_architecture/core/utils/values/colors.dart';
+
 enum WeatherTypeEnum {
   Thunderstorm,
   Drizzle,

@@ -5,6 +5,7 @@ import 'package:weather_clean_architecture/features/weather_info/data/datasource
 import 'package:weather_clean_architecture/features/weather_info/data/repositories/weather_repository_impl.dart';
 import 'package:weather_clean_architecture/features/weather_info/domain/repositories/weather_repository.dart';
 import 'package:weather_clean_architecture/features/weather_info/domain/usecases/get_weather_data_by_city.dart';
+import 'package:weather_clean_architecture/features/weather_info/domain/usecases/get_weather_data_forecast.dart';
 import 'package:weather_clean_architecture/features/weather_info/presentation/weather_details/bloc/weather_bloc.dart';
 import 'package:weather_clean_architecture/features/weather_info/presentation/weather_details/view/home_page.dart';
 
@@ -34,8 +35,11 @@ class AppModule extends Module {
         weatherRemoteDatasource: i.get<WeatherRemoteDatasource>()));
     i.addLazySingleton(() =>
         GetWeatherDataByCity(weatherRepository: i.get<WeatherRepository>()));
-    i.addLazySingleton(
-        () => WeatherBloc(getWeatherDataByCity: i.get<GetWeatherDataByCity>()));
+    i.addLazySingleton(() =>
+        GetWeatherDataForecast(weatherRepository: i.get<WeatherRepository>()));
+    i.addLazySingleton(() => WeatherBloc(
+        getWeatherDataByCity: i.get<GetWeatherDataByCity>(),
+        getWeatherDataForecast: i.get<GetWeatherDataForecast>()));
   }
 
   @override

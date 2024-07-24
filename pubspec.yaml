@@ -81,6 +81,34 @@ flutter:
   assets:
     - assets/
     - assets/background.jpg
+  fonts:
+    - family: PoppinsBold
+      fonts:
+        - asset: fonts/Poppins-Bold.ttf
+    - family: PoppinsBoldItalic
+      fonts:
+        - asset: fonts/Poppins-BoldItalic.ttf
+    - family: PoppinsExtraBold
+      fonts:
+        - asset: fonts/Poppins-ExtraBold.ttf
+    - family: PoppinsExtraBoldItalic
+      fonts:
+        - asset: fonts/Poppins-ExtraBoldItalic.ttf
+    - family: PoppinsMedium
+      fonts:
+        - asset: fonts/Poppins-Medium.ttf
+    - family: PoppinsMediumItalic
+      fonts:
+        - asset: fonts/Poppins-MediumItalic.ttf
+    - family: PoppinsRegular
+      fonts:
+        - asset: fonts/Poppins-Regular.ttf
+    - family: PoppinsSemiBold
+      fonts:
+        - asset: fonts/Poppins-SemiBold.ttf
+    - family: PoppinsSemiBoldItalic
+      fonts:
+        - asset: fonts/Poppins-SemiBoldItalic.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:
