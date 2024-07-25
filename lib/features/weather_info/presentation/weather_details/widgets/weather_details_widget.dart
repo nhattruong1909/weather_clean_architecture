@@ -111,7 +111,7 @@ class WeatherDetailsWidget extends StatelessWidget {
                             size: 20,
                           )),
                           TextSpan(
-                              text: weather.visibility.toString() ?? 'None',
+                              text: weather.visibility?.toString() ?? 'None',
                               style: poppinsRegular.copyWith(fontSize: 20))
                         ]))
                       ])),
@@ -130,7 +130,8 @@ class WeatherDetailsWidget extends StatelessWidget {
                             size: 20,
                           )),
                           TextSpan(
-                              text: weather.main?.humidity.toString() ?? 'None',
+                              text:
+                                  weather.main?.humidity?.toString() ?? 'None',
                               style: poppinsRegular.copyWith(fontSize: 20))
                         ]))
                       ]))
