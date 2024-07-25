@@ -111,7 +111,7 @@ class _HomePageState extends State<HomePage> {
               else if (state is WeatherErrorState)
                 return CustomErrorWidget(error: state.message);
               else
-                throw const CustomErrorWidget(error: 'Unknown Error!');
+                return const CustomErrorWidget(error: 'Unknown Error!');
             },
           ),
         ));
