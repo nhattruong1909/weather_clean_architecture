@@ -24,6 +24,7 @@ if (flutterVersionName == null) {
 }
 
 android {
+    compileSdkVersion 33
     namespace = "com.example.weather_clean_architecture"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion

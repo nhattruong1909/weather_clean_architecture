@@ -1,9 +1,12 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:weather_clean_architecture/core/network/dio_client.dart';
+import 'package:weather_clean_architecture/core/utils/location/location_helper.dart';
 import 'package:weather_clean_architecture/features/weather_info/data/datasources/remote_datasource/weather_remote_datasource.dart';
 import 'package:weather_clean_architecture/features/weather_info/data/datasources/remote_datasource/weather_remote_datasource_impl.dart';
 import 'package:weather_clean_architecture/features/weather_info/data/repositories/weather_repository_impl.dart';
 import 'package:weather_clean_architecture/features/weather_info/domain/repositories/weather_repository.dart';
+import 'package:weather_clean_architecture/features/weather_info/domain/usecases/get_current_location_forecast.dart';
+import 'package:weather_clean_architecture/features/weather_info/domain/usecases/get_current_location_weather.dart';
 import 'package:weather_clean_architecture/features/weather_info/domain/usecases/get_weather_data_by_city.dart';
 import 'package:weather_clean_architecture/features/weather_info/domain/usecases/get_weather_data_forecast.dart';
 import 'package:weather_clean_architecture/features/weather_info/presentation/weather_details/bloc/weather_bloc.dart';
@@ -29,17 +32,25 @@ class AppModule extends Module {
   void binds(Injector i) {
     // TODO: implement binds
     i.addLazySingleton(() => DioClient());
+    i.addLazySingleton(() => LocationHelper());
     i.addLazySingleton<WeatherRemoteDatasource>(
         () => WeatherRemoteDatasourceImpl(dio: i.get<DioClient>()));
     i.addLazySingleton<WeatherRepository>(() => WeatherRepositoryImpl(
-        weatherRemoteDatasource: i.get<WeatherRemoteDatasource>()));
+        weatherRemoteDatasource: i.get<WeatherRemoteDatasource>(),
+        locationHelper: i.get<LocationHelper>()));
     i.addLazySingleton(() =>
         GetWeatherDataByCity(weatherRepository: i.get<WeatherRepository>()));
     i.addLazySingleton(() =>
         GetWeatherDataForecast(weatherRepository: i.get<WeatherRepository>()));
+    i.addLazySingleton(() => GetCurrentLocationWeather(
+        weatherRepository: i.get<WeatherRepository>()));
+    i.addLazySingleton(() => GetCurrentLocationForecast(
+        weatherRepository: i.get<WeatherRepository>()));
     i.addLazySingleton(() => WeatherBloc(
         getWeatherDataByCity: i.get<GetWeatherDataByCity>(),
-        getWeatherDataForecast: i.get<GetWeatherDataForecast>()));
+        getWeatherDataForecast: i.get<GetWeatherDataForecast>(),
+        getCurrentLocationForecast: i.get<GetCurrentLocationForecast>(),
+        getCurrentLocationWeather: i.get<GetCurrentLocationWeather>()));
   }
 
   @override

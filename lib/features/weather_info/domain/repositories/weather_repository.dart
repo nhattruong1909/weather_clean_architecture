@@ -8,4 +8,8 @@ abstract class WeatherRepository {
       {String? cityName});
   Future<Either<NetworkException, WeatherInfoForecastEntity?>>
       getWeatherForecast({String? cityName});
+  Future<Either<NetworkException, WeatherInfoEntity?>>
+      getCurrentLocationWeather();
+  Future<Either<NetworkException, WeatherInfoForecastEntity?>>
+      getCurrentLocationForecast();
 }

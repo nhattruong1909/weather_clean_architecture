@@ -3,8 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:weather_clean_architecture/core/utils/values/style.dart';
 import 'package:weather_clean_architecture/features/weather_info/presentation/weather_details/widgets/error_widget.dart';
 import 'package:weather_clean_architecture/features/weather_info/presentation/weather_details/bloc/weather_bloc.dart';
+import 'package:weather_clean_architecture/features/weather_info/presentation/weather_details/widgets/weather_3hours_list_widget.dart';
 import 'package:weather_clean_architecture/features/weather_info/presentation/weather_details/widgets/weather_details_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -23,6 +25,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     blocWeather.add(const WeatherInitialEvent());
+    blocWeather.add(const WeatherInitialCurrentEvent());
+    blocWeather.add(const WeatherInitailForecastEvent());
   }
 
   Widget _searchTextField() {
@@ -34,8 +38,17 @@ class _HomePageState extends State<HomePage> {
           color: Colors.black,
           fontSize: 20,
         ),
-        onSubmitted: (value) =>
-            blocWeather.add(WeatherInputCityEvent(searchController.text)),
+        onSubmitted: (value) {
+          // blocWeather.add(WeatherInputCityEvent(searchController.text)),
+          blocWeather
+              .add(WeatherInputCityForCurrentEvent(searchController.text));
+          blocWeather
+              .add(WeatherInputCityForForcaseEvent(searchController.text));
+
+          // Future.delayed(Duration(milliseconds: 100)).then((valueFuture) =>
+          //     blocWeather
+          //         .add(WeatherInputCityForCurrentEvent(searchController.text)));
+        },
         textInputAction:
             TextInputAction.search, //Specify the action button on the keyboard
         decoration: const InputDecoration(
@@ -104,11 +117,75 @@ class _HomePageState extends State<HomePage> {
                     child: const Center(
                       child: CircularProgressIndicator(),
                     ));
-              else if (state is WeatherLoadedByCityState)
-                return WeatherDetailsWidget(
-                    weather: state.weatherInfoEntity!,
-                    weather_forecast: state.weatherInfoForecastEntity!);
-              else if (state is WeatherErrorState)
+              else if (state is WeatherLoadedByCityState) {
+                final _firstColor =
+                    state.weatherInfoEntity?.weatherTheme?.firstColor ??
+                        const Color(0xFF3E97C8);
+                final _secondColor =
+                    state.weatherInfoEntity?.weatherTheme?.secondColor ??
+                        const Color(0xFFD8E7F2);
+                return Container(
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: <Color>[_secondColor, _firstColor])),
+                    height: double.infinity,
+                    width: double.infinity,
+                    child: SingleChildScrollView(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                          BlocBuilder<WeatherBloc, WeatherState>(
+                              builder: (context, state) {
+                            if (state is WeatherLoadedByCityState &&
+                                state.weatherInfoEntity != null) {
+                              return WeatherDetailsWidget(
+                                  weather: state.weatherInfoEntity!);
+                            }
+
+                            return Container(
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 10),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 10),
+                              decoration: const BoxDecoration(
+                                  color: Color(0x26FFFFFF),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0))),
+                              width: double.infinity,
+                              height: 30,
+                              child: Text('Current Weather',
+                                  style:
+                                      poppinsSemiBold.copyWith(fontSize: 20)),
+                            );
+                          }),
+                          BlocBuilder<WeatherBloc, WeatherState>(
+                              builder: (context, state) {
+                            if (state is WeatherLoadedByCityState &&
+                                state.weatherInfoForecastEntity != null) {
+                              return Weather3hoursListWidget(
+                                  weather: state.weatherInfoForecastEntity!);
+                            }
+
+                            return Container(
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 10),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 10),
+                              decoration: const BoxDecoration(
+                                  color: Color(0x26FFFFFF),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0))),
+                              width: double.infinity,
+                              height: 30,
+                              child: Text('Current Weather Forecast',
+                                  style:
+                                      poppinsSemiBold.copyWith(fontSize: 20)),
+                            );
+                          })
+                        ])));
+              } else if (state is WeatherErrorState)
                 return CustomErrorWidget(error: state.message);
               else
                 return const CustomErrorWidget(error: 'Unknown Error!');
